@@ -1,0 +1,43 @@
+{% extends "lainatehdas/base.html" %}
+
+{% block title %}Luo tili{% endblock %}
+
+{% block content %}
+<div class="w-1/2 my-6 mx-auto p-5 bg-gray-200 rounded-xl">
+    <h1 class="mb-6 text-2xl">Luo tili</h1>
+
+    <form method="post" action=".">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="inline-block mb-2">Käyttäjänimi</label><br>
+            {{form.username}}
+        </div>
+        <div class="mb-3">
+            <label class="inline-block mb-2">Email</label><br>
+            {{form.email}}
+        </div>
+        <div class="mb-3">
+            <label class="inline-block mb-2">Salasana</label><br>
+            {{form.password1}}
+        </div>
+        <div class="mb-3">
+            <label class="inline-block mb-2">Salasana uudestaan</label><br>
+            {{form.password2}}
+        </div>
+        {% if form.errors or form.non_field_errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                {% for field in form %}
+                    {{ field.errors }}
+                        
+                    {% endfor %}
+           
+                {{form.non_field_errors }}
+   
+              
+            </div>
+           
+        {% endif %}
+<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Luo tili</button>
+    </form>"
+    </div>
+{% endblock %}
