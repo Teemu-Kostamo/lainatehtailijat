@@ -1,0 +1,16 @@
+{% extends "lainatehdas/base.html" %}
+
+{% block title %}Välineet{% endblock %}
+
+{% block content %}
+<h1 style="font-size:200%">Välineet</h1>
+<br>
+{% if items_list %}
+<ul>
+    {% for item in items_list %}
+            <li><a href="/main/{{item.id}}/">{{item}} - {{item.get_item_avail_display}}</a></li>
+    {% endfor %}
+{% else %}
+    <p>No items available</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "lainatehdas/base.html" %}
+
+{% block content %}
+    <p>Nimi - {{item.item_name}}</p>
+    <p>Seloste - {{item.item_desc}}</p>
+    <p>Tyyppi - {{item.get_item_type_display}}</p>
+    <p>Tila - {{item.get_item_avail_display}}</p>
+{% endblock %}
