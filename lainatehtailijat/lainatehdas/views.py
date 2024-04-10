@@ -14,18 +14,22 @@ def register(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/login')
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password1")
+            user = authenticate(username=username, password=password)
+            login(request,user)
+            return redirect('/main')
     else:
         form = UserRegisterForm()
     return render(request, 'lainatehdas/register.html', {'form': form})
 
-@login_required(login_url="/login")
+@login_required
 def main(request):
     items_list = Item.objects.order_by("item_name")
     context = {'items_list' : items_list}
     return render(request, 'lainatehdas/main.html', context)
 
-@login_required(login_url="/login")
+@login_required
 def detail(request, item_id):
     item = get_object_or_404(Item, pk = item_id)
     return render(request, 'lainatehdas/detail.html', {'item' : item})
