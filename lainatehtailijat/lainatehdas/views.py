@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserRegisterForm
-from .models import Item
+from .models import Item, Reservation
 from django.http import Http404, HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -34,5 +34,8 @@ def detail(request, item_id):
     item = get_object_or_404(Item, pk = item_id)
     return render(request, 'lainatehdas/detail.html', {'item' : item})
 
+@login_required
 def reservations(request):
-    return render(request, 'lainatehdas/reservations.html')
+    user_reservations = Reservation.objects.filter(user=request.user)
+    return render(request, 'lainatehdas/reservations.html', {'reservations': user_reservations})
+

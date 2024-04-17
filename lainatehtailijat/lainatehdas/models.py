@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -25,3 +26,12 @@ class Item(models.Model):
     item_avail = models.CharField(max_length=2, choices=item_avail_choices, verbose_name="Availability")
     def __str__(self) -> str:
         return self.item_name
+    
+class Reservation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    date_reserved = models.DateTimeField(auto_now_add=True)
+    date_returned = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.item} varattuna käyttäjälle {self.user.username}"

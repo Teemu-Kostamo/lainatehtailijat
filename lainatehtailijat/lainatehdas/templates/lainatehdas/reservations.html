@@ -1,17 +1,68 @@
 {% extends "lainatehdas/base.html" %}
+{% load static %}
 
 {% block title %}Omat varaukset{% endblock %}
 
 {% block content %}
-<h1 style="font-size:200%">Omat varaukset</h1>
-<br>
-{% if items_list %}
-<ul>
-    {% for item in items_list %}
-            <li><a href="{% url 'lainatehdas:detail' item.id %}">{{item}} - {{item.get_item_avail_display}}</a></li>
+<h1 class="text-3xl font-bold mb-4">Omat varaukset</h1>
+
+{% if reservations %}
+<table class="min-w-full divide-y divide-gray-200">
+  <thead class="bg-gray-50">
+    <tr>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        Nimi
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        Varattu
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        Palautettu
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        Varaa uudelleen
+      </th>
+    </tr>
+  </thead>
+  <tbody class="bg-white divide-y divide-gray-200">
+    {% for reservation in reservations %}
+    <tr {% if reservation.date_returned %}class="bg-gray-200"{% endif %}>
+      <td class="px-6 py-4 whitespace-nowrap">
+        {{ reservation.item.item_name }}
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap">
+        {{ reservation.date_reserved|date:"d.m.Y H:i" }}
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap">
+        {% if reservation.date_returned %}
+          {{ reservation.date_returned |date:"d.m.Y H:i"}}
+        {% else %}
+          <button class="bg-green-500 text-white px-4 py-2 rounded-md" {% if reservation.item.item_avail == 'Va' %}onclick="returnItem('{{ reservation.id }}')" {% else %}disabled{% endif %}>Palauta</button>
+        {% endif %}
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap">
+        {% if reservation.date_returned %}
+          <button class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="reserveItem('{{ reservation.item.id }}')">Varaa</button>
+        {% endif %}
+      </td>
+    </tr>
     {% endfor %}
-</ul>
+  </tbody>
+</table>
 {% else %}
-    <p>Ei varauksia</p>
+<p>Ei varauksia</p>
 {% endif %}
+
+<script>
+  function returnItem(reservationId) {
+    // jotenkin tässä pitäis tehdä palautus
+
+  }
+
+  function reserveItem(itemId) {
+    // tässä pitäis tehdä uusi varaus
+  }
+</script>
+
 {% endblock %}
+
