@@ -1,0 +1,17 @@
+{% extends "lainatehdas/base.html" %}
+
+{% block title %}Omat varaukset{% endblock %}
+
+{% block content %}
+<h1 style="font-size:200%">Omat varaukset</h1>
+<br>
+{% if items_list %}
+<ul>
+    {% for item in items_list %}
+            <li><a href="{% url 'lainatehdas:detail' item.id %}">{{item}} - {{item.get_item_avail_display}}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+    <p>Ei varauksia</p>
+{% endif %}
+{% endblock %}

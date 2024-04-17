@@ -9,6 +9,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='lainatehdas/login.html',authentication_form=UserLoginForm), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('main/', views.main, name='main'),
+    path('reservations/', views.reservations, name='reservations'),
     path('main/<int:item_id>/', views.detail, name='detail')
     
 ]

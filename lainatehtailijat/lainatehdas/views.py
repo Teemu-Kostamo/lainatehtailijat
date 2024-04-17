@@ -33,3 +33,6 @@ def main(request):
 def detail(request, item_id):
     item = get_object_or_404(Item, pk = item_id)
     return render(request, 'lainatehdas/detail.html', {'item' : item})
+
+def reservations(request):
+    return render(request, 'lainatehdas/reservations.html')
