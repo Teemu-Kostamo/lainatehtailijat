@@ -16,3 +16,4 @@ class UserRegisterForm(UserCreationForm):
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Käyttäjänimi', 'class': 'w-full py-5 px-6 rounded-xl'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Salasana', 'class':'w-full py-4 px-6 rounded-xl'}))
+

@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserRegisterForm
 from .models import Item, Reservation
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.views import View
+from django.urls import reverse_lazy
+from datetime import date
 
 # Create your views here.
 def index(request):
@@ -38,4 +41,18 @@ def detail(request, item_id):
 def reservations(request):
     user_reservations = Reservation.objects.filter(user=request.user)
     return render(request, 'lainatehdas/reservations.html', {'reservations': user_reservations})
+
+@login_required
+def create_new_reservation(request, item_id):
+    user = request.user.id
+    Reservation.objects.create(user_id = user, item_id = item_id, date_reserved = date.today())
+    return redirect('/reservations')
+
+@login_required
+def update_return_date(request, reservation_id):
+    reservation = Reservation.objects.get(id=reservation_id)
+    reservation.date_returned = date.today()
+    reservation.save()
+    return redirect('/reservations')
+
 
