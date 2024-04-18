@@ -46,6 +46,9 @@ def reservations(request):
 def create_new_reservation(request, item_id):
     user = request.user.id
     Reservation.objects.create(user_id = user, item_id = item_id, date_reserved = date.today())
+    item = get_object_or_404(Item, id=item_id)
+    item.item_avail = "varattu"
+    item.save()
     return redirect('/reservations')
 
 @login_required
