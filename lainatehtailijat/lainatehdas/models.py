@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import timedelta, date
 
-
 # Create your models here.
 
 class Item(models.Model):
@@ -25,7 +24,7 @@ class Item(models.Model):
     item_desc = models.CharField(max_length= 500, verbose_name="Description")
     item_type = models.CharField(max_length=4, choices=item_choices, verbose_name="Type")
     item_avail = models.CharField(max_length=2, choices=item_avail_choices, default="vapaa")
-    # item_img = 
+    item_img = models.ImageField(upload_to='media/', default='media/placeholder.jpg')
     def __str__(self) -> str:
         return self.item_name
     

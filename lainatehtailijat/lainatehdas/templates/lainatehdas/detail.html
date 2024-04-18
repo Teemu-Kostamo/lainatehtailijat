@@ -5,4 +5,9 @@
     <p>Seloste - {{item.item_desc}}</p>
     <p>Tyyppi - {{item.get_item_type_display}}</p>
     <p>Tila - {{item.get_item_avail_display}}</p>
+    {% load static %}
+    <img src="{% static item.item_img %}" width="500" height="600">
+    <script>
+        console.log('{{item.item_img}}')
+    </script>
 {% endblock %}
