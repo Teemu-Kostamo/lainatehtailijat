@@ -41,13 +41,13 @@
             {% csrf_token %}
             <button type= "submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Palauta</button>
           </form>
-          {% endif %}
+        {% endif %}
       </td>
       <td class="px-6 py-4 whitespace-nowrap">
-        {% if reservation.date_returned %}
+        {% if reservation.item.item_avail == 'Va' %}
           <form method="POST" action="{% url 'lainatehdas:create_new_reservation' reservation.item.id %}">
             {% csrf_token %}
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Varaa</button>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Varaa uudelleen</button>
           </form>
         {% endif %}
       </td>
@@ -59,4 +59,3 @@
 <p>Ei varauksia</p>
 {% endif %}
 {% endblock %}
-
