@@ -29,7 +29,8 @@ def register(request):
 @login_required
 def main(request):
     items_list = Item.objects.order_by("item_name")
-    context = {'items_list' : items_list}
+    reservation_list = Reservation.objects.all()
+    context = {'items_list' : items_list, 'reservation_list' : reservation_list}
     return render(request, 'lainatehdas/main.html', context)
 
 @login_required
@@ -47,9 +48,9 @@ def create_new_reservation(request, item_id):
     user = request.user.id
     Reservation.objects.create(user_id = user, item_id = item_id, date_reserved = date.today())
     item = get_object_or_404(Item, id=item_id)
-    item.item_avail = "varattu"
+    item.item_avail = "Vr"
     item.save()
-    return redirect('/reservations')
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 @login_required
 def update_return_date(request, reservation_id, item_id):
@@ -57,8 +58,9 @@ def update_return_date(request, reservation_id, item_id):
     reservation.date_returned = date.today()
     reservation.save()
     item = get_object_or_404(Item, id=item_id)
-    item.item_avail = "vapaa"
+    item.item_avail = "Va"
+    reservation.reservation_complete = True
     item.save()
-    return redirect('/reservations')
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 
