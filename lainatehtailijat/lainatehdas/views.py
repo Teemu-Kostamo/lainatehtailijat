@@ -36,7 +36,9 @@ def main(request):
 @login_required
 def detail(request, item_id):
     item = get_object_or_404(Item, pk = item_id)
-    return render(request, 'lainatehdas/detail.html', {'item' : item})
+    reservation_list = Reservation.objects.all()
+    context = {'item' : item, 'reservation_list' : reservation_list}
+    return render(request, 'lainatehdas/detail.html', context)
 
 @login_required
 def reservations(request):
