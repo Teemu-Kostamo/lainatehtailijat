@@ -10,11 +10,11 @@
         <body>
             <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-300">
             {% if request.user.is_authenticated %}
-                {% if request.path != '/reservations/' %}  
-                <a href="{% url 'lainatehdas:reservations'%}" class="px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Omat varaukset</a>
-                {% endif %}
-                {% if request.path != '/main/' %} 
-                <a href="{% url 'lainatehdas:main'%}" class="px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Välineet</a>
+                {% if request.path == '/main/' %}  
+                    <a href="{% url 'lainatehdas:reservations'%}" class="px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Omat varaukset</a>
+                {% else %} 
+                    <a href="{% url 'lainatehdas:main'%}" class="px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Välineet</a>
+
                 {% endif %}
             <a href="/" class="text-xl font-semibold">Tervetuloa {{request.user.username}}!</a>
             <div class="space-x-6">

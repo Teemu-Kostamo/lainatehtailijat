@@ -7,7 +7,7 @@
 <h1 style="font-size:200%">Välineet</h1>
 <br>
 {% if items_list %}
-<ul>
+<ul class = "py-6 px-6 flex justify-between items-center border-b border-gray-300">
     {% for item in items_list %}
             <li>
                 <a href="{% url 'lainatehdas:detail' item.id %}">{{item}} - {{item.get_item_avail_display}}</a>
