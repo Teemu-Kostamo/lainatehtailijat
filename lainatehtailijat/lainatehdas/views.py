@@ -42,8 +42,16 @@ def detail(request, item_id):
 
 @login_required
 def reservations(request):
-    user_reservations = Reservation.objects.filter(user=request.user)
-    return render(request, 'lainatehdas/reservations.html', {'reservations': user_reservations})
+    user_id = request.user.id
+    active_reservations = Reservation.objects.filter(user_id=user_id, date_returned__isnull=True)
+    old_reservations = Reservation.objects.filter(user_id=user_id).exclude(date_returned__isnull=True)
+    
+    context = {
+        'active_reservations': active_reservations,
+        'old_reservations': old_reservations,
+    }
+    
+    return render(request, 'lainatehdas/reservations.html', context)
 
 @login_required
 def create_new_reservation(request, item_id):
