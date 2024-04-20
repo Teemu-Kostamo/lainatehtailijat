@@ -30,7 +30,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL='/login'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["192.168.8.10"]
 
 
 # Application definition
