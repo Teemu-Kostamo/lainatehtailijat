@@ -6,7 +6,8 @@
 {% block content %}
 <h1 class="text-3xl font-bold mb-4">Omat varaukset</h1>
 
-{% if reservations %}
+{% if active_reservations %}
+<h2 class="text-xl font-bold mb-2">Aktiiviset varaukset</h2>
 <table class="min-w-full divide-y divide-gray-200">
   <thead class="bg-gray-50">
     <tr>
@@ -17,16 +18,13 @@
         Varattu
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        Palautettu
-      </th>
-      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        Varaa uudelleen
+        Palautus
       </th>
     </tr>
   </thead>
   <tbody class="bg-white divide-y divide-gray-200">
-    {% for reservation in reservations %}
-    <tr {% if reservation.date_returned %}class="bg-gray-200"{% endif %}>
+    {% for reservation in active_reservations %}
+    <tr>
       <td class="px-6 py-4 whitespace-nowrap">
         {{ reservation.item.item_name }}
       </td>
@@ -43,19 +41,58 @@
           </form>
         {% endif %}
       </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Ei aktiivisia varauksia</p>
+{% endif %}
+
+{% if old_reservations %}
+<h2 class="text-xl font-bold mt-4 mb-2">Vanhat varaukset</h2>
+<table class="min-w-full divide-y divide-gray-200">
+  <thead class="bg-gray-50">
+    <tr>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        Nimi
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        Varattu
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        Palautettu
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        Varaus
+      </th>
+    </tr>
+  </thead>
+  <tbody class="bg-white divide-y divide-gray-200">
+    {% for reservation in old_reservations %}
+    <tr>
       <td class="px-6 py-4 whitespace-nowrap">
-        {% if reservation.item.item_avail == 'Va' %}
-          <form method="POST" action="{% url 'lainatehdas:create_new_reservation' reservation.item.id %}">
-            {% csrf_token %}
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Varaa uudelleen</button>
-          </form>
-        {% endif %}
+        {{ reservation.item.item_name }}
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap">
+        {{ reservation.date_reserved|date:"d.m.Y" }}
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap">
+        {{ reservation.date_returned|date:"d.m.Y" }}
+        <td class="px-6 py-4 whitespace-nowrap">
+          {% if reservation.item.item_avail == 'Va' %}
+            <form method="POST" action="{% url 'lainatehdas:create_new_reservation' reservation.item.id %}">
+              {% csrf_token %}
+              <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Varaa uudelleen</button>
+            </form>
+          {% endif %}
+        </td>
       </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 {% else %}
-<p>Ei varauksia</p>
+<p>Ei vanhoja varauksia</p>
 {% endif %}
 {% endblock %}
