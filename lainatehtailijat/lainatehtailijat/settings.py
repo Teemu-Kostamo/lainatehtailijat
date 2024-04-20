@@ -80,9 +80,17 @@ WSGI_APPLICATION = 'lainatehtailijat.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "LAINATEHDAS_DATABASE",
+        "USER": "LAINATEHDAS_USER",
+        "PASSWORD": "970577417AbCd!",
+        "HOST": "192.168.8.10",
+        "PORT": "3307",
     }
 }
 
