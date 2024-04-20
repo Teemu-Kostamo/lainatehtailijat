@@ -16,7 +16,7 @@
                     <a href="{% url 'lainatehdas:main'%}" class="px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Välineet</a>
 
                 {% endif %}
-            <a href="/" class="text-xl font-semibold">Tervetuloa {{request.user.username}}!</a>
+            <a href="/" class="text-xl font-semibold">Tervetuloa {{request.user.username|capfirst}}!</a>
             <div class="space-x-6">
                 <form id="logout-form" action="{% url 'lainatehdas:logout' %}" method="post">
                     {% csrf_token %}

@@ -1,33 +1,38 @@
 {% extends "lainatehdas/base.html" %}
-
+{% load static %}
 {% block content %}
-    <p>Nimi - {{item.item_name}}</p>
-    <p>Seloste - {{item.item_desc}}</p>
-    <p>Tyyppi - {{item.get_item_type_display}}</p>
-    <p>Tila - {{item.get_item_avail_display}}</p>
-    {% load static %}
-    <img src="{% static item.item_img %}" width="500" height="600">
-    <br>
-    {% if item.item_avail == "Va" %}
-        <form method="POST" action="{% url 'lainatehdas:create_new_reservation' item.id %}">
-            {% csrf_token %}
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Varaa</button>
-        </form>
-    {% elif item.item_avail == "Vr" %}
-        {% for reservation in reservation_list %}
-            {% if reservation.date_returned == Null and reservation.user_id == request.user.id %}
-                <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
-                    {% csrf_token %}
-                    <button type= "submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Palauta</button>
-                </form>
-            {% elif reservation.date_returned == Null and reservation.user_id != request.user.id %}
-                <button type= "submit" class="bg-gray-500 text-white px-4 py-2 rounded-md" disabled>{{item.get_item_avail_display}}</button>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <button type= "submit" class="bg-gray-500 text-white px-4 py-2 rounded-md" disabled>{{item.get_item_avail_display}}</button>
-    {% endif %}
-    <script>
-        console.log('{{item.item_img}}')
-    </script>
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="md:order-2">
+                <img src="{% static item.item_img %}" class="w-full h-auto rounded-lg shadow-md" alt="{{ item.item_name }}">
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">{{ item.item_name }}</h2>
+                <p class="text-lg text-gray-700 mb-4">{{ item.item_desc }}</p>
+                <p class="text-lg text-gray-700 mb-4">Tyyppi: {{ item.get_item_type_display }}</p>
+                <p class="text-lg text-gray-700 mb-4">Tila: {{ item.get_item_avail_display }}</p>
+                <div class="mb-4">
+                    {% if item.item_avail == "Va" %}
+                        <form method="POST" action="{% url 'lainatehdas:create_new_reservation' item.id %}">
+                            {% csrf_token %}
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Varaa</button>
+                        </form>
+                    {% elif item.item_avail == "Vr" %}
+                        {% for reservation in reservation_list %}
+                            {% if reservation.date_returned == null and reservation.user_id == request.user.id %}
+                                <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">Palauta</button>
+                                </form>
+                            {% elif reservation.date_returned == null and reservation.user_id != request.user.id %}
+                                <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed" disabled>{{ item.get_item_avail_display }}</button>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed" disabled>{{ item.get_item_avail_display }}</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

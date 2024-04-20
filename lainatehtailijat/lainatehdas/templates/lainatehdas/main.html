@@ -4,38 +4,44 @@
 {% block title %}Välineet{% endblock %}
 
 {% block content %}
-<h1 style="font-size:200%">Välineet</h1>
-<br>
-{% if items_list %}
-<ul class = "py-6 px-6 flex justify-between items-center border-b border-gray-300">
-    {% for item in items_list %}
-            <li>
-                <a href="{% url 'lainatehdas:detail' item.id %}">{{item}} - {{item.get_item_avail_display}}</a>
-                <img src="{% static item.item_img %}" width="200" height="300">
-            {% if item.item_avail == "Va" %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Välineet</h1>
+    {% if items_list %}
+    <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for item in items_list %}
+        <li class="bg-gray-200 rounded-lg shadow-md">
+            <a href="{% url 'lainatehdas:detail' item.id %}" class="block p-4">
+                <h2 class="text-xl font-bold text-gray-900 mb-2">{{ item.item_name|capfirst }}</h2>
+                <div class="aspect-w-4 aspect-h-5 mb-4">
+                    <img src="{% static item.item_img %}" class="object-cover rounded-lg" alt="{{ item.item_name }}">
+                </div>
+                <div>
+                    {% if item.item_avail == "Va" %}
                     <form method="POST" action="{% url 'lainatehdas:create_new_reservation' item.id %}">
                         {% csrf_token %}
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Varaa</button>
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Varaa</button>
                     </form>
-            {% elif item.item_avail == "Vr" %}
-                {% for reservation in reservation_list %}
-                    {% if reservation.date_returned == Null and reservation.user_id == request.user.id %}
-                        <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
-                            {% csrf_token %}
-                            <button type= "submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Palauta</button>
-                        </form>
-                    {% elif reservation.date_returned == Null and reservation.user_id != request.user.id %}
-                    <button type= "submit" class="bg-gray-500 text-white px-4 py-2 rounded-md">{{item.get_item_avail_display}}</button>
+                    {% elif item.item_avail == "Vr" %}
+                    {% for reservation in reservation_list %}
+                    {% if reservation.date_returned == null and reservation.user_id == request.user.id %}
+                    <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">Palauta</button>
+                    </form>
+                    {% elif reservation.date_returned == null and reservation.user_id != request.user.id %}
+                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed" disabled>{{ item.get_item_avail_display }}</button>
                     {% endif %}
-                {% endfor %}
-            {% else %}
-                <button type= "submit" class="bg-gray-500 text-white px-4 py-2 rounded-md">{{item.get_item_avail_display}}</button>
-            {% endif %}
-            </li>
-            <br><br>
-    {% endfor %}
-</ul>
-{% else %}
-    <p>No items available</p>
-{% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed" disabled>{{ item.get_item_avail_display }}</button>
+                    {% endif %}
+                </div>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-lg text-gray-700">No items available</p>
+    {% endif %}
+</div>
 {% endblock %}
