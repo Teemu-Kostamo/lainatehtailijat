@@ -23,7 +23,7 @@ class Item(models.Model):
     item_name = models.CharField(max_length= 200, verbose_name="Name")
     item_desc = models.CharField(max_length= 500, verbose_name="Description")
     item_type = models.CharField(max_length=4, choices=item_choices, verbose_name="Type")
-    item_avail = models.CharField(max_length=2, choices=item_avail_choices)
+    item_avail = models.CharField(max_length=2, choices=item_avail_choices, default="Va")
     item_img = models.ImageField(upload_to='media/', default='media/placeholder.jpg')
     def __str__(self) -> str:
         return self.item_name
