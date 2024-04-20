@@ -31,6 +31,7 @@ LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL='/login'
 
 ALLOWED_HOSTS = ["192.168.8.10", "lainatehdas.duckdns.org"]
+CSRF_TRUSTED_ORIGINS = ["https://lainatehdas.duckdns.org"]
 
 
 # Application definition
