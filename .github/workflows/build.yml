@@ -29,4 +29,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lainatehtailijat:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lainatehtailijat:${{ env.NOW }}
