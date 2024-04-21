@@ -1,43 +1,49 @@
-<!doctype html>
-<htlm>
+<!DOCTYPE html>
+<html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://cdn.tailwindcss.com"></script>
         <title>{%block title %} {%endblock%} | Lainatehdas</title>
-        </head>
+    </head>
 
-        <body>
-            <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-300">
-            {% if request.user.is_authenticated %}
-                {% if request.path == '/main/' %}  
-                    <a href="{% url 'lainatehdas:reservations'%}" class="px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Omat varaukset</a>
-                {% else %} 
-                    <a href="{% url 'lainatehdas:main'%}" class="px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Välineet</a>
+<body>
+    {% block header%}
+    <nav class="py-10 px-6 relative border-b border-gray-300 bg-gray-700 text-center">
+        <div class="text-3xl font-semibold text-white">Lainatehdas</div>
+        <div class="text-2xl font-semibold text-white">Tervetuloa {{ request.user.username|capfirst }}!</div>
+    </nav>
+    {% endblock%}
+    <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-300 bg-gray-400">
+        {% if request.user.is_authenticated %}
+            {% if request.path == '/main/' %}  
+                <a href="{% url 'lainatehdas:reservations'%}" class="px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Omat varaukset</a>
+            {% else %} 
+                <a href="{% url 'lainatehdas:main'%}" class="px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Välineet</a>
 
-                {% endif %}
-            <a href="/" class="text-xl font-semibold">Tervetuloa {{request.user.username|capfirst}}!</a>
+            {% endif %}
+            <form id="logout-form" action="{% url 'lainatehdas:logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-blue-700">Kirjaudu ulos</button>
+            </form>
+        {% else  %}
+            <a href="/" class="text-xl font-semibold text-white">Tervetuloa!</a>
             <div class="space-x-6">
-                <form id="logout-form" action="{% url 'lainatehdas:logout' %}" method="post">
-                    {% csrf_token %}
-                    {% comment %} <p>{{request.user.username}}</p> Tää on vain placeholder/testaus {% endcomment %} 
-                    <button type="submit" class="px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-blue-700">Kirjaudu ulos</button>
-                </form>
-                {% else  %}
-                <a href="/" class="text-xl font-semibold">Tervetuloa lainatehtaalle!</a>
-                <div class="space-x-6">
-                <a href="{% url 'lainatehdas:login'%}" class="px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-blue-700">Kirjaudu</a>
-                <a href="{% url 'lainatehdas:register'%}" class="px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-blue-700">Luo tili</a>
+                {% if request.path == '/login/' %}
+                    <a href="{% url 'lainatehdas:register'%}" class="px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-blue-700">Luo tili</a>
+                {% else %}
+                    <a href="{% url 'lainatehdas:login'%}" class="px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-blue-700">Kirjaudu</a>
                 {% endif %}
-                </nav>
-            <div class="px-6 py-6">
-              {%block content%}
-              {% endblock %}
-            </div>
-            <footer class="py-7 px-7 flex justify-between bg-gray-700">
-                <div class="w-1/3 pr-7">
-                    <h3 class="mb-5 font-semibold text-white">Lainatehtailijat</h3>
-                </div>
-                </footer>
-            </body>
-            </html>
+        {% endif %}
+    </nav>
+    <div class="px-6 py-6">
+        {%block content%}
+        {% endblock %}
+    </div>
+    <footer class="py-7 px-7 flex justify-between bg-gray-700">
+        <div class="w-1/3 pr-7">
+            <h3 class="mb-5 font-semibold text-white">Lainatehtailijat</h3>
+        </div>
+    </footer>
+</body>
+</html>

@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block title %}Välineet{% endblock %}
-
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-8">Välineet</h1>
@@ -14,7 +13,7 @@
     {% if items_list %}
     <ul id="itemList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {% for item in items_list %}
-        <li class="bg-gray-200 rounded-lg shadow-md">
+        <li class="bg-gray-200 rounded-lg hover:shadow-lg transition-transform transform hover:-translate-y-2">
             <a href="{% url 'lainatehdas:detail' item.id %}" class="block p-4">
                 <h2 class="text-xl font-bold text-gray-900 mb-2">{{ item.item_name|capfirst }}</h2>
                 <div class="aspect-w-4 aspect-h-5 mb-4">
@@ -24,7 +23,7 @@
                     {% if item.item_avail == "Va" %}
                     <form method="POST" action="{% url 'lainatehdas:create_new_reservation' item.id %}">
                         {% csrf_token %}
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Varaa</button>
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ">Varaa</button>
                     </form>
                     {% elif item.item_avail == "Vr" %}
                     {% for reservation in reservation_list %}

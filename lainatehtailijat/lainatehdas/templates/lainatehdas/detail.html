@@ -1,5 +1,13 @@
 {% extends "lainatehdas/base.html" %}
 {% load static %}
+
+{% block header %}
+<nav class="py-10 px-6 relative border-b border-gray-300 bg-gray-700 text-center">
+    <div class="text-3xl font-semibold text-white">Lainatehdas</div>
+    <br>
+</nav>
+{% endblock header %}
+
 {% block content %}
     <div class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -15,7 +23,7 @@
                     {% if item.item_avail == "Va" %}
                         <form method="POST" action="{% url 'lainatehdas:create_new_reservation' item.id %}">
                             {% csrf_token %}
-                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Varaa</button>
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ">Varaa</button>
                         </form>
                     {% elif item.item_avail == "Vr" %}
                         {% for reservation in reservation_list %}
