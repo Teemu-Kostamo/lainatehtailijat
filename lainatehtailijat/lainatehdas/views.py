@@ -31,14 +31,14 @@ def register(request):
 def main(request):
     items_list = Item.objects.order_by("item_name")
     reservation_list = Reservation.objects.all()
-    context = {'items_list' : items_list, 'reservation_list' : reservation_list, 'MEDIA_URL' : settings.MEDIA_URL, 'MEDIA_ROOT' : settings.MEDIA_ROOT}
+    context = {'items_list' : items_list, 'reservation_list' : reservation_list, 'MEDIA_URL' : settings.MEDIA_URL}
     return render(request, 'lainatehdas/main.html', context)
 
 @login_required
 def detail(request, item_id):
     item = get_object_or_404(Item, pk = item_id)
     reservation_list = Reservation.objects.all()
-    context = {'item' : item, 'reservation_list' : reservation_list}
+    context = {'item' : item, 'reservation_list' : reservation_list, 'MEDIA_URL' : settings.MEDIA_URL}
     return render(request, 'lainatehdas/detail.html', context)
 
 @login_required

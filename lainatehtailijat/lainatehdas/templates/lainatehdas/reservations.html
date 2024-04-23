@@ -20,9 +20,14 @@
       {% for reservation in active_reservations %}
       <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
         <div class="p-4">
-          <h2 class="text-xl font-bold mb-2">{{ reservation.item.item_name }}</h2>
-          <p class="text-sm text-gray-500 mb-2">Varattu: {{ reservation.date_reserved|date:"d.m.Y" }}</p>
-          <p class="text-sm text-gray-500 mb-2">Palautus: 
+          <h2 class="text-xl font-bold mb-2">
+            {{ reservation.item.item_name }}
+          </h2>
+          <p class="text-sm text-gray-500 mb-2">
+            Varattu: {{ reservation.date_reserved|date:"d.m.Y" }}
+          </p>
+          <p class="text-sm text-gray-500 mb-2">
+            Palautus: 
             {% if reservation.date_returned %}
               {{ reservation.date_returned |date:"d.m.Y"}}
             {% else %}
@@ -52,7 +57,7 @@
         <div class="col-span-3">
           <div class="button-container bg-blue-500 text-white px-4 py-2 rounded-md mb-2 inline-block transition-all duration-300">
             <button id="button-{{ month_reservations.grouper }}" onclick="toggleReservations('{{ month_reservations.grouper }}')">
-              {{ month_reservations.grouper }}
+              {{ month_reservations.grouper|capfirst }}
             </button>
           </div>
           <div id="reservations-{{ month_reservations.grouper }}" class="hidden overflow-hidden transition-max-height duration-500 max-h-0">
@@ -84,7 +89,7 @@
                   </p>
 
                 </div>
-                
+
               </div>
             {% endfor %}
           </div>
