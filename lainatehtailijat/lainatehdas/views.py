@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.urls import reverse_lazy
 from datetime import date
+from django.conf import settings
 
 # Create your views here.
 def index(request):
@@ -30,7 +31,7 @@ def register(request):
 def main(request):
     items_list = Item.objects.order_by("item_name")
     reservation_list = Reservation.objects.all()
-    context = {'items_list' : items_list, 'reservation_list' : reservation_list}
+    context = {'items_list' : items_list, 'reservation_list' : reservation_list, 'MEDIA_URL' : settings.MEDIA_URL, 'MEDIA_ROOT' : settings.MEDIA_ROOT}
     return render(request, 'lainatehdas/main.html', context)
 
 @login_required

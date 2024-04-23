@@ -16,9 +16,9 @@
         <li class="bg-gray-200 rounded-lg hover:shadow-lg transition-transform transform hover:-translate-y-2">
             <a href="{% url 'lainatehdas:detail' item.id %}" class="block p-4">
                 <h2 class="text-xl font-bold text-gray-900 mb-2">{{ item.item_name|capfirst }}</h2>
-                <div class="aspect-w-4 aspect-h-5 mb-4">
-                    <img src="{% static item.item_img %}" class="object-cover rounded-lg" alt="{{ item.item_name }}">
-                </div>
+                <div class="aspect-w-4 aspect-h-5 mb-4 bg-gray-200 rounded-lg flex items-center justify-center min-w-0 min-h-0">
+                    <img src="{{MEDIA_URL}}{{item.item_img}}" class="object-cover rounded-lg min-w-0 min-h-0" alt="{{ item.item_name }}">
+                </div>                            
                 <div>
                     {% if item.item_avail == "Va" %}
                     <form method="POST" action="{% url 'lainatehdas:create_new_reservation' item.id %}">
@@ -27,7 +27,7 @@
                     </form>
                     {% elif item.item_avail == "Vr" %}
                     {% for reservation in reservation_list %}
-                    {% if reservation.date_returned == null and reservation.user_id == request.user.id %}
+                    {% if reservation.item_id == item.id and reservation.date_returned == null and reservation.user_id == request.user.id %}
                     <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
                         {% csrf_token %}
                         <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">Palauta</button>

@@ -27,7 +27,7 @@
                         </form>
                     {% elif item.item_avail == "Vr" %}
                         {% for reservation in reservation_list %}
-                            {% if reservation.date_returned == null and reservation.user_id == request.user.id %}
+                            {% if reservation.item_id == item.id and reservation.date_returned == null and reservation.user_id == request.user.id %}
                                 <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
                                     {% csrf_token %}
                                     <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">Palauta</button>

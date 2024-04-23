@@ -15,6 +15,4 @@ urlpatterns = [
     path('reservations/<int:reservation_id>/update_return_date/<int:item_id>/', views.update_return_date, name='update_return_date'),
     path('reservations/<int:item_id>/create/', views.create_new_reservation, name='create_new_reservation'),
     path('main/<int:item_id>/', views.detail, name='detail')
-    
-
-]
+] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
