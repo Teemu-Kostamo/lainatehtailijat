@@ -4,12 +4,12 @@
 {% block header %}
 <nav class="py-10 px-6 relative border-b border-gray-300 bg-gray-700 text-center">
     <div class="text-3xl font-semibold text-white">Lainatehdas</div>
-    <br>
 </nav>
 {% endblock header %}
 
 {% block content %}
-    <div class="container mx-auto px-4 py-8">
+
+<div class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="md:order-2">
                 <img src="{{MEDIA_URL}}{{item.item_img}}" class="w-full h-auto rounded-lg shadow-md" alt="{{ item.item_name }}">
@@ -51,4 +51,34 @@
             </div>
         </div>
     </div>
-{% endblock %}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const popupContainer = document.getElementById('popupContainer');
+            const popupMessage = document.getElementById('popupMessage');
+        
+            function showPopup(message, color) {
+                popupMessage.textContent = message;
+                popupMessage.style.backgroundColor = color;
+                popupContainer.classList.remove('opacity-0');
+                popupContainer.classList.add('opacity-100');
+                setTimeout(function() {
+                    popupContainer.classList.remove('opacity-100');
+                    popupContainer.classList.add('opacity-0');
+                }, 3000);
+            }
+        
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags %}
+                        {% if 'normal' in message.tags %}
+                            showPopup("{{ message }}", "rgb(34,197,94)");
+                        {% elif 'late' in message.tags %}
+                            showPopup("{{ message }}", "rgb(251,191,36)");
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
+    {% endblock %}

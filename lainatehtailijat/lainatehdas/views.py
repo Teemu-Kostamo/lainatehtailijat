@@ -8,6 +8,7 @@ from django.views import View
 from django.urls import reverse_lazy
 from datetime import date
 from django.conf import settings
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -61,6 +62,10 @@ def create_new_reservation(request, item_id):
     item = get_object_or_404(Item, id=item_id)
     item.item_avail = "Vr"
     item.save()
+    message_text = f'{Item.objects.get(id=item_id)} on varattu onnistuneesti!'
+    message_tag = 'normal'
+    messages.add_message(request, messages.INFO, message_text, extra_tags=message_tag)
+    
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 @login_required
@@ -72,6 +77,14 @@ def update_return_date(request, reservation_id, item_id):
     item.item_avail = "Va"
     reservation.reservation_complete = True
     item.save()
+    delta = reservation.date_returned - reservation.date_deadline
+    if delta.days <= 0:
+        message_text = f'Palautus onnistui. {item} palautettu ajallaan!'
+        message_tag = 'normal'
+    else:
+        message_text = f'Palautus onnistui. {item} palautettu {delta.days} vuorokautta myöhässä!'
+        message_tag  = 'late'
+    messages.add_message(request, messages.INFO, message_text, extra_tags=message_tag)
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 

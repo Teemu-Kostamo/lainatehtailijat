@@ -3,50 +3,51 @@
 
 {% block title %}Välineet{% endblock %}
 {% block content %}
+
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-8">Välineet</h1>
+
 
     <div class="mb-4">
         <input type="text" id="searchInput" class="w-full px-4 py-2 border rounded-md" placeholder="Etsi välinettä...">
     </div>
 
-    {% if items_list %}
+{% if items_list %}
     <ul id="itemList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {% for item in items_list %}
-        <li class="bg-gray-200 rounded-lg hover:shadow-lg transition-transform transform hover:-translate-y-2">
-            <a href="{% url 'lainatehdas:detail' item.id %}" class="block p-4">
-                <h2 class="text-xl font-bold text-gray-900 mb-2">{{ item.item_name|capfirst }}</h2>
-                <div class="aspect-w-4 aspect-h-5 mb-4 bg-gray-200 rounded-lg flex items-center justify-center min-w-0 min-h-0">
-                    <img src="{{MEDIA_URL}}{{item.item_img}}" class="object-cover rounded-lg min-w-0 min-h-0" alt="{{ item.item_name }}">
-                </div>                            
-                <div>
-                    {% if item.item_avail == "Va" %}
-                    <form method="POST" action="{% url 'lainatehdas:create_new_reservation' item.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ">Varaa</button>
-                    </form>
-                    {% elif item.item_avail == "Vr" %}
-                    {% for reservation in reservation_list %}
-                    {% if reservation.item_id == item.id and reservation.date_returned == null and reservation.user_id == request.user.id %}
-                    <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">Palauta</button>
-                    </form>
-                    {% elif reservation.date_returned == null and reservation.user_id != request.user.id %}
-                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed" disabled>{{ item.get_item_avail_display }}</button>
-                    {% endif %}
-                    {% endfor %}
-                    {% else %}
-                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed" disabled>{{ item.get_item_avail_display }}</button>
-                    {% endif %}
-                </div>
-            </a>
-        </li>
+            <li class="bg-gray-200 rounded-lg hover:shadow-lg transition-transform transform hover:-translate-y-2">
+                <a href="{% url 'lainatehdas:detail' item.id %}" class="block p-4">
+                    <h2 class="text-xl font-bold text-gray-900 mb-2">{{ item.item_name|capfirst }}</h2>
+                    <div class="aspect-w-4 aspect-h-5 mb-4 bg-gray-200 rounded-lg flex items-center justify-center min-w-0 min-h-0">
+                        <img src="{{MEDIA_URL}}{{item.item_img}}" class="object-cover rounded-lg min-w-0 min-h-0" alt="{{ item.item_name }}">
+                    </div>                            
+                    <div>
+                        {% if item.item_avail == "Va" %}
+                            <form method="POST" action="{% url 'lainatehdas:create_new_reservation' item.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ">Varaa</button>
+                            </form>
+                        {% elif item.item_avail == "Vr" %}
+                            {% for reservation in reservation_list %}
+                                {% if reservation.item_id == item.id and reservation.date_returned == null and reservation.user_id == request.user.id %}
+                                    <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">Palauta</button>
+                                    </form>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed" disabled>{{ item.get_item_avail_display }}</button>
+                        {% endif %}
+                    </div>
+                </a>
+            </li>
         {% endfor %}
     </ul>
-    {% else %}
+{% else %}
     <p class="text-lg text-gray-700">Ei välineitä</p>
-    {% endif %}
+{% endif %}
+
 </div>
 
 <script>
@@ -63,6 +64,33 @@ document.getElementById('searchInput').addEventListener('input', function() {
             item.style.display = 'none';
         }
     });
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const popupContainer = document.getElementById('popupContainer');
+    const popupMessage = document.getElementById('popupMessage');
+
+    function showPopup(message, color) {
+        popupMessage.textContent = message;
+        popupMessage.style.backgroundColor = color;
+        popupContainer.classList.remove('opacity-0');
+        popupContainer.classList.add('opacity-100');
+        setTimeout(function() {
+            popupContainer.classList.remove('opacity-100');
+            popupContainer.classList.add('opacity-0');
+        }, 3000);
+    }
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags %}
+                {% if 'normal' in message.tags %}
+                    showPopup("{{ message }}", "rgb(34,197,94)");
+                {% elif 'late' in message.tags %}
+                    showPopup("{{ message }}", "rgb(251,191,36)");
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 });
 </script>
 

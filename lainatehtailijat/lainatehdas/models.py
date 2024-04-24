@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import timedelta, date
 from django.core.exceptions import ValidationError
+from django.utils.timezone import now
 
 # Create your models here.
 
@@ -37,9 +38,19 @@ class Reservation(models.Model):
     def __str__(self):
         return f"{self.item} varattuna käyttäjälle {self.user.username}"
     
+    def CalculateDeadline(self):
+        return self.date_reserved + timedelta(days=14)
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.date_deadline = self.CalculateDeadline()
+        super().save(*args, **kwargs)
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     #date_reserved = models.DateField(auto_now_add=True)
     date_reserved = models.DateField()
     date_returned = models.DateField(null=True, blank=True)
+    date_deadline = models.DateField(null=True, blank=True)
+
 
