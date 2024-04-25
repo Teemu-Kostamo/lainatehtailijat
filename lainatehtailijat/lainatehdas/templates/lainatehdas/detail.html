@@ -34,15 +34,26 @@
                             {% if reservation.item_id == item.id and reservation.date_returned == null and reservation.user_id == request.user.id %}
                                 <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">Palauta</button>
+                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md mb-4">Palauta</button>
                                 </form>
                             {% elif reservation.date_returned == null and reservation.user_id != request.user.id %}
-                                <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed" disabled>{{ item.get_item_avail_display }}</button>
+                                <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed mb-4" disabled>{{ item.get_item_avail_display }}</button>
                             {% endif %}
                         {% endfor %}
                     {% else %}
-                        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed" disabled>{{ item.get_item_avail_display }}</button>
+                        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed mb-4" disabled>{{ item.get_item_avail_display }}</button>
                     {% endif %}
+                    <p class="text-lg text-gray-700 mb-4">
+                        {% if item.item_avail == 'Vr'%}
+                            {% for reservation in reservation_list %}
+                                {% if reservation.item_id == item.id and reservation.date_returned == null and reservation.return_ontime == True %}
+                                    Välineen tulisi vapautua {{ reservation.days_until_deadline }} vuorokauden kuluttua.
+                                {% elif reservation.item_id == item.id and reservation.date_returned == null and reservation.return_ontime == False %}
+                                    Välineen palautus on myöhässä {{ reservation.days_until_deadline }} vuorokautta.
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </p>
                 </div>
             </div>
         </div>

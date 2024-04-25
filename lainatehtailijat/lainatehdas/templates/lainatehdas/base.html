@@ -28,17 +28,18 @@
 <body>
 <div class="wrapper">
     {% block header %}
-        <nav class="py-14 px-6 relative text-center" style="background-image: url('{{MEDIA_URL}}images/taloyhtio.jpg'); background-size: cover; background-position: center center;">
+        <nav class="py-4 px-4 md:py-14 md:px-6 relative text-center" style="background-image: url('{{MEDIA_URL}}images/taloyhtio.jpg'); background-size: cover; background-position: center;">
             <div style="background-color: rgba(0, 0, 0, 0.5);" class="absolute inset-0"></div>
             <div class="relative text-white z-10">
-                <div class="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-wider mb-2">Lainatehdas</div>
-                {% if request.path == '/main/'%}
-                    <div class="text-lg md:text-xl font-semibold opacity-90">Tervetuloa {{ request.user.username|capfirst }}!</div>
+                <div class="text-xl md:text-3xl lg:text-5xl font-semibold tracking-wider mb-2">Lainatehdas</div>
+                {% if request.path == '/main/' %}
+                    <div class="text-sm md:text-lg font-semibold opacity-90">Tervetuloa {{ request.user.username|capfirst }}!</div>
                 {% else %}
-                    <div class="text-lg md:text-xl font-semibold opacity-0">Tervetuloa {{ request.user.username|capfirst }}!</div>
+                    <div class="text-sm md:text-lg font-semibold opacity-0">Tervetuloa {{ request.user.username|capfirst }}!</div>
                 {% endif %}
             </div>
-        </nav>        
+        </nav>
+    
 
     {% endblock %}
     {% block message %}
@@ -85,12 +86,15 @@
 
         {% endblock %}
     </div>
-    <footer class="py-7 px-7 flex justify-between bg-gray-700">
-        <div class="w-1/3 pr-7">
-            <h3 class="mb-5 font-semibold text-white">AS Oy. Lainatehtailijat</h3>
-            <a class="mb-5 font-semibold text-white" href="{% url 'lainatehdas:info'%}">Info</a>
+    <footer class="py-4 px-6 flex justify-between items-center bg-gray-700">
+        <div class="flex-1">
+            <h3 class="text-white font-semibold">AS Oy. Lainatehtailijat</h3>
+        </div>
+        <div class="flex-1 text-right">
+            <a class="text-white font-semibold" href="{% url 'lainatehdas:info' %}">Info</a>
         </div>
     </footer>
+    
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.urls import reverse_lazy
-from datetime import date
+from datetime import date, timedelta
 from django.conf import settings
 from django.contrib import messages
 
@@ -49,10 +49,19 @@ def main(request):
 def detail(request, item_id):
     item = get_object_or_404(Item, pk = item_id)
     reservation_list = Reservation.objects.all()
+    for reservation in reservation_list:
+        delta = reservation.date_deadline - date.today()
+        reservation.days_until_deadline = delta.days
+        if delta >= timedelta(days=0):
+            reservation.return_ontime = True
+        else:
+            reservation.return_ontime = False
+            reservation.days_until_deadline = abs(reservation.days_until_deadline)
+             
     context = {
         'item' : item, 
         'reservation_list' : reservation_list, 
-        'MEDIA_URL' : settings.MEDIA_URL
+        'MEDIA_URL' : settings.MEDIA_URL,
     }
     return render(request, 'lainatehdas/detail.html', context)
 
@@ -61,6 +70,14 @@ def reservations(request):
     user_id = request.user.id
     active_reservations = Reservation.objects.filter(user_id=user_id, date_returned__isnull=True)
     old_reservations = Reservation.objects.filter(user_id=user_id).exclude(date_returned__isnull=True)
+    for reservation in active_reservations:
+        delta = reservation.date_deadline - date.today()
+        if delta >= timedelta(days=0):
+            reservation.days_until_deadline = delta.days
+            reservation.return_ontime = True
+        else:
+            reservation.return_ontime = False
+            reservation.days_until_deadline = abs(delta.days)
     
     context = {
         'active_reservations': active_reservations,

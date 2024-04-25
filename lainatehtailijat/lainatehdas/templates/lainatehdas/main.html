@@ -34,10 +34,12 @@
                                                 {% csrf_token %}
                                                 <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">Palauta</button>
                                             </form>
+                                        {% elif reservation.item_id == item.id and reservation.date_returned == null and reservation.user_id != request.user.id %}
+                                        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed disabled">{{ item.get_item_avail_display }}</button>
                                         {% endif %}
                                     {% endfor %}
                                 {% else %}
-                                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed" disabled>{{ item.get_item_avail_display }}</button>
+                                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed disabled">{{ item.get_item_avail_display }}</button>
                                 {% endif %}
                             </div>
                         </a>

@@ -33,7 +33,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL='/login'
 
-ALLOWED_HOSTS = ["127.0.0.1","192.168.8.10", "lainatehdas.duckdns.org"]
+ALLOWED_HOSTS = ["127.0.0.1", "lainatehdas.duckdns.org"]
 CSRF_TRUSTED_ORIGINS = ["https://lainatehdas.duckdns.org"]
 
 
