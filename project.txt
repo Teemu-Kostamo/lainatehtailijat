@@ -1,9 +1,6 @@
-Finally you must upload a filed called project.txt here that has the following (each on its own line)
-Project topic
-group members (full name)
-public ip address where the service found as the end result
-of the project can be tested
-test ID with passwords for testing, unless you can easily
-create IDs yourself
+Lainausjärjestelmä lainatehdas
+Teemu Kostamo, Heikki Pernu
+https://lainatehdas.duckdns.org
+test ID with passwords for testing, unless you can easily create IDs yourself
 link to the project's GitHub (use the same GitHub organization as for assignments as well)
 link to YouTube video
