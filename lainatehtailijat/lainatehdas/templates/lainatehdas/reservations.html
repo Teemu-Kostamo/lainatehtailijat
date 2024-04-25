@@ -3,12 +3,6 @@
 
 {% block title %}Omat varaukset{% endblock %}
 
-{% block header %}
-<nav class="py-10 px-6 relative border-b border-gray-300 bg-gray-700 text-center">
-    <div class="text-3xl font-semibold text-white">Lainatehdas</div>
-</nav>
-{% endblock header %}
-
 {% block content %}
 <h1 class="text-3xl font-bold mb-4">Omat varaukset</h1>
 
@@ -17,9 +11,11 @@
 <div class="border border-gray-300 p-3 rounded-lg">
   <h2 class="text-xl font-bold mb-2">Aktiiviset varaukset</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {% for reservation in active_reservations %}
+    {% for reservation in active_reservations %}
       <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+
         <div class="p-4">
+
           <h2 class="text-xl font-bold mb-2">
             {{ reservation.item.item_name }}
           </h2>
@@ -27,6 +23,7 @@
             Varattu: {{ reservation.date_reserved|date:"d.m.Y" }}
           </p>
           <p class="text-sm text-gray-500 mb-2">
+
             Palautus: 
             {% if reservation.date_returned %}
               {{ reservation.date_returned |date:"d.m.Y"}}
@@ -36,6 +33,7 @@
                 <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Palauta</button>
               </form>
             {% endif %}
+
           </p>
         </div>
       </div>
@@ -43,7 +41,7 @@
   </div>
 </div>
 {% else %}
-<p>Ei aktiivisia varauksia</p>
+<p class="text-lg text-gray-700">Ei aktiivisia varauksia</p>
 {% endif %}
 
 {% if old_reservations %}
@@ -94,7 +92,7 @@
     {% endfor %}
   </div>
 {% else %}
-  <p>Ei vanhoja varauksia</p>
+  <p class="text-lg text-gray-700">Ei vanhoja varauksia</p>
 {% endif %}
 
 <script>
@@ -119,5 +117,32 @@
       }, { once: true });
     }
   }
+  document.addEventListener('DOMContentLoaded', function() {
+    const popupContainer = document.getElementById('popupContainer');
+    const popupMessage = document.getElementById('popupMessage');
+
+    function showPopup(message, color) {
+        popupMessage.textContent = message;
+        popupMessage.style.backgroundColor = color;
+        popupContainer.classList.remove('opacity-0');
+        popupContainer.classList.add('opacity-100');
+        setTimeout(function() {
+            popupContainer.classList.remove('opacity-100');
+            popupContainer.classList.add('opacity-0');
+        }, 3000);
+    }
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags %}
+                {% if 'normal' in message.tags %}
+                    showPopup("{{ message }}", "rgb(34,197,94)");
+                {% elif 'late' in message.tags %}
+                    showPopup("{{ message }}", "rgb(251,191,36)");
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+});
 </script>
 {% endblock %}

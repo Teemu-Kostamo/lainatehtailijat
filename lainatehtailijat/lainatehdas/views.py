@@ -14,6 +14,12 @@ from django.contrib import messages
 def index(request):
         return redirect('/main')
 
+def info(request):
+        context = {
+             'MEDIA_URL' : settings.MEDIA_URL
+        }
+        return render(request, 'lainatehdas/info.html', context)
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -26,20 +32,28 @@ def register(request):
             return redirect('/main')
     else:
         form = UserRegisterForm()
-    return render(request, 'lainatehdas/register.html', {'form': form})
+    return render(request, 'lainatehdas/register.html', {'form': form, 'MEDIA_URL': settings.MEDIA_URL})
 
 @login_required
 def main(request):
     items_list = Item.objects.order_by("item_name")
     reservation_list = Reservation.objects.all()
-    context = {'items_list' : items_list, 'reservation_list' : reservation_list, 'MEDIA_URL' : settings.MEDIA_URL}
+    context = {
+        'items_list' : items_list, 
+        'reservation_list' : reservation_list, 
+        'MEDIA_URL' : settings.MEDIA_URL
+    }
     return render(request, 'lainatehdas/main.html', context)
 
 @login_required
 def detail(request, item_id):
     item = get_object_or_404(Item, pk = item_id)
     reservation_list = Reservation.objects.all()
-    context = {'item' : item, 'reservation_list' : reservation_list, 'MEDIA_URL' : settings.MEDIA_URL}
+    context = {
+        'item' : item, 
+        'reservation_list' : reservation_list, 
+        'MEDIA_URL' : settings.MEDIA_URL
+    }
     return render(request, 'lainatehdas/detail.html', context)
 
 @login_required
@@ -51,6 +65,7 @@ def reservations(request):
     context = {
         'active_reservations': active_reservations,
         'old_reservations': old_reservations,
+        'MEDIA_URL' : settings.MEDIA_URL
     }
     
     return render(request, 'lainatehdas/reservations.html', context)
@@ -70,7 +85,7 @@ def create_new_reservation(request, item_id):
 
 @login_required
 def update_return_date(request, reservation_id, item_id):
-    reservation = Reservation.objects.get(id=reservation_id)
+    reservation = get_object_or_404(Reservation, id=reservation_id)
     reservation.date_returned = date.today()
     reservation.save()
     item = get_object_or_404(Item, id=item_id)
