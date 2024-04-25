@@ -1,0 +1,63 @@
+{% extends "lainatehdas/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-semibold text-center tracking-wider mb-6">Tervetuloa AS Oy. Lainatehtailijat välinevuokrauspalveluun!</h1>
+    <p class="text-lg text-gray-700">
+        Tämä palvelu tarjoaa taloyhtiön asukkaille kätevän tavan varata erilaisia välineitä yhteiseen käyttöön. 
+        Palvelu on suunniteltu helpottamaan arkeasi tarjoamalla pääsyn tarvittaviin työkaluihin ja laitteisiin ilman, että niitä tarvitsee itse hankkia.
+    </p>
+
+    <h2 class="text-2xl font-semibold text-gray-800 mt-8 mb-4">
+        Kuinka palvelu toimii:
+    </h2>
+
+    <ul class="list-disc list-inside space-y-2 text-gray-700">
+        <li>
+            <strong>
+                Välinevaraus:
+            </strong> 
+            Kirjaudu sisään sivustolle ja selaa saatavilla olevia välineitä. 
+            Kun löydät tarvitsemasi välineen, voit varata sen käyttöösi antamalla tarvittavat tiedot ja valitsemalla haluamasi noutopäivä.
+        </li>
+        <li>
+            <strong>
+                Välineen nouto:
+            </strong> 
+            Nouda varattu väline sovittuna päivänä.
+        </li>
+        <li>
+            <strong>
+                Välineen palautus:
+            </strong> 
+            Palauta väline viimeistään sovittuna palautuspäivänä, jotta se on taas muiden asukkaiden varattavissa.
+        </li>
+    </ul>
+
+    <h2 class="text-2xl font-semibold text-gray-800 mt-8 mb-4">
+        Vuokrausehdot:
+    </h2>
+
+    <ul class="list-disc list-inside space-y-2 text-gray-700">
+        <li>
+            <strong>
+                Vuokrausaika:
+            </strong> 
+            Jokaiselle välineelle myönnetään enintään 14 vuorokauden vuokra-aika. Tämä varmistaa, että mahdollisimman moni asukas pääsee hyödyntämään välineitä.
+        </li>
+        <li>
+            <strong>
+                Myöhästymismaksut:
+            </strong> 
+            Jos väline palautetaan myöhässä, perimme myöhästymismaksun, joka on voimassa olevan taksan mukainen sakko per lisävuorokausi. 
+            Tämä kannustaa oikea-aikaisiin palautuksiin ja auttaa pitämään palvelun kaikkien asukkaiden saatavilla.
+        </li>
+    </ul>
+
+    <p class="text-lg text-gray-700 mt-6">
+        Lainatehtailijat-sivusto on suunniteltu tekemään välineiden lainaamisesta yksinkertaista ja vaivatonta. 
+        Kiitämme sinua yhteisön resurssien vastuullisesta käytöstä ja toivotamme hyödyllisiä lainauskokemuksia!
+    </p>
+</div>
+{% endblock %}
