@@ -1,0 +1,6 @@
+# Exclude  folders
+Projektin_raportit/
+
+# Exclude files
+README.md
+.gitignore
