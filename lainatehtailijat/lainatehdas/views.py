@@ -9,16 +9,11 @@ from django.urls import reverse_lazy
 from datetime import date, timedelta
 from django.conf import settings
 from django.contrib import messages
+import json
 
 # Create your views here.
 def index(request):
-        return redirect('/main')
-
-def info(request):
-        context = {
-             'MEDIA_URL' : settings.MEDIA_URL
-        }
-        return render(request, 'lainatehdas/info.html', context)
+        return redirect('/info')
 
 def register(request):
     if request.method == 'POST':
@@ -29,27 +24,44 @@ def register(request):
             password = form.cleaned_data.get("password1")
             user = authenticate(username=username, password=password)
             login(request,user)
-            return redirect('/main')
+            return redirect('/info')
     else:
         form = UserRegisterForm()
     return render(request, 'lainatehdas/register.html', {'form': form, 'MEDIA_URL': settings.MEDIA_URL})
 
 @login_required
+def info(request):
+        context = {
+             'MEDIA_URL' : settings.MEDIA_URL
+        }
+        return render(request, 'lainatehdas/info.html', context)
+
+@login_required
 def main(request):
     items_list = Item.objects.order_by("item_name")
     reservation_list = Reservation.objects.all()
+
+    msg_list = []
+    for message in messages.get_messages(request):
+        msg_list.append({
+            "message": message.message,
+            "tags": message.tags
+        })
+
     context = {
         'items_list' : items_list, 
         'reservation_list' : reservation_list, 
-        'MEDIA_URL' : settings.MEDIA_URL
+        'MEDIA_URL' : settings.MEDIA_URL,
+        'messages_json': json.dumps(msg_list)
     }
     return render(request, 'lainatehdas/main.html', context)
 
 @login_required
 def detail(request, item_id):
     item = get_object_or_404(Item, pk = item_id)
-    reservation_list = Reservation.objects.all()
-    for reservation in reservation_list:
+
+    if item.item_avail == "Vr":
+        reservation = get_object_or_404(Reservation, date_returned__isnull=True, item__id=item_id)
         delta = reservation.date_deadline - date.today()
         reservation.days_until_deadline = delta.days
         if delta >= timedelta(days=0):
@@ -57,11 +69,21 @@ def detail(request, item_id):
         else:
             reservation.return_ontime = False
             reservation.days_until_deadline = abs(reservation.days_until_deadline)
+    else:
+        reservation = ""
+
+    msg_list = []
+    for message in messages.get_messages(request):
+        msg_list.append({
+            "message": message.message,
+            "tags": message.tags
+        })
              
     context = {
         'item' : item, 
-        'reservation_list' : reservation_list, 
+        'reservation' : reservation,
         'MEDIA_URL' : settings.MEDIA_URL,
+        'messages_json': json.dumps(msg_list)
     }
     return render(request, 'lainatehdas/detail.html', context)
 
@@ -78,11 +100,19 @@ def reservations(request):
         else:
             reservation.return_ontime = False
             reservation.days_until_deadline = abs(delta.days)
+
+    msg_list = []
+    for message in messages.get_messages(request):
+        msg_list.append({
+            "message": message.message,
+            "tags": message.tags
+        })
     
     context = {
         'active_reservations': active_reservations,
         'old_reservations': old_reservations,
-        'MEDIA_URL' : settings.MEDIA_URL
+        'MEDIA_URL' : settings.MEDIA_URL,
+        'messages_json': json.dumps(msg_list)
     }
     
     return render(request, 'lainatehdas/reservations.html', context)

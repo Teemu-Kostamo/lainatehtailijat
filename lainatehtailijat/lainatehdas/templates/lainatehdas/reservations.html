@@ -7,36 +7,26 @@
 <h1 class="text-3xl font-bold mb-4">Omat varaukset</h1>
 
 {% if active_reservations %}
-
 <div class="border border-gray-300 p-3 rounded-lg">
   <h2 class="text-xl font-bold mb-2">Aktiiviset varaukset</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for reservation in active_reservations %}
-      <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-
-        <div class="p-4">
-
-          <h2 class="text-xl font-bold mb-2">
-            {{ reservation.item.item_name }}
-          </h2>
-          <p class="text-sm text-gray-500 mb-2">
-            Varattu: {{ reservation.date_reserved|date:"d.m.Y" }}
-          </p>
-          <p class="text-sm text-gray-500 mb-2">
-            {% if reservation.return_ontime == True %}
-            Palautus: {{ reservation.days_until_deadline }} vuorokauden kuluttua.
-            {% elif reservation.return_ontime == False %}
-            Palautus: {{ reservation.days_until_deadline }} vuorokautta myöhässä.
-            {% endif %}
-              <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
-                {% csrf_token %}
-                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Palauta</button>
-              </form>
-
-          </p>
-        </div>
+    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+      <div class="p-4">
+        <h2 class="text-xl font-bold mb-2">{{ reservation.item.item_name }}</h2>
+        <p class="text-sm text-gray-500 mb-2">
+          Varattu: {{ reservation.date_reserved|date:"d.m.Y" }}
+        </p>
+        <p class="text-sm text-gray-500 mb-2">
+          Palautus: {% if reservation.return_ontime %}{{ reservation.days_until_deadline }} vuorokauden kuluttua.{% else %}{{ reservation.days_until_deadline }} vuorokautta myöhässä.{% endif %}
+        </p>
+        <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
+          {% csrf_token %}
+          <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Palauta</button>
+        </form>
       </div>
-      {% endfor %}
+    </div>
+    {% endfor %}
   </div>
 </div>
 {% else %}
@@ -44,104 +34,59 @@
 {% endif %}
 
 {% if old_reservations %}
-  <div class="border border-gray-300 p-3 rounded-lg">
-    <h2 class="text-xl font-bold mt-4 mb-2">Vanhat varaukset</h2>
-    {% regroup old_reservations by date_reserved.year as reservations_by_year %}
-    {% for year_reservations in reservations_by_year %}
-      <div class="border-b border-gray-300 mb-4 pb-2">
-        <h3 class="text-lg font-bold">{{ year_reservations.grouper }}</h3>
-        {% regroup year_reservations.list by date_reserved|date:"F" as reservations_by_month %}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
-          {% for month_reservations in reservations_by_month %}
-            <div class="col-span-3">
-              <div class="button-container bg-blue-500 text-white px-4 py-2 rounded-md mb-2 inline-block transition-all duration-300">
-                <button id="button-{{ year_reservations.grouper }}-{{ month_reservations.grouper }}" onclick="toggleReservations('{{ year_reservations.grouper }}-{{ month_reservations.grouper }}')">
-                  {{ month_reservations.grouper|capfirst }}
-                </button>
-              </div>
-              <div id="reservations-{{ year_reservations.grouper }}-{{ month_reservations.grouper }}" class="hidden overflow-hidden transition-max-height duration-500 max-h-0">
-                {% for reservation in month_reservations.list %}
-                  <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 mb-4">
-                    <div class="p-4">
-                      <h2 class="text-xl font-bold mb-2">
-                        {{ reservation.item.item_name }}
-                      </h2>
-                      <p class="text-sm text-gray-500 mb-2">
-                        Varattu: {{ reservation.date_reserved|date:"d.m.Y" }}
-                      </p>
-                      <p class="text-sm text-gray-500 mb-2">
-                        Palautettu: {{ reservation.date_returned|date:"d.m.Y" }}
-                      </p>
-                      <p class="text-sm text-gray-500 mb-2">
-                        {% if reservation.item.item_avail == 'Va' %}
-                          <form method="POST" action="{% url 'lainatehdas:create_new_reservation' reservation.item.id %}">
-                            {% csrf_token %}
-                            <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Varaa uudelleen</button>
-                          </form>
-                        {% endif %}
-                      </p>
-                    </div>
-                  </div>
-                {% endfor %}
-              </div>
+<div class="border border-gray-300 p-3 rounded-lg">
+  <h2 class="text-xl font-bold mt-4 mb-2">Vanhat varaukset</h2>
+  {% regroup old_reservations by date_reserved.year as reservations_by_year %}
+  {% for year_reservations in reservations_by_year %}
+  <div class="border-b border-gray-300 mb-4 pb-2">
+    <h3 class="text-lg font-bold">{{ year_reservations.grouper }}</h3>
+    {% regroup year_reservations.list by date_reserved|date:"F" as reservations_by_month %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
+      {% for month_reservations in reservations_by_month %}
+      <div class="col-span-3">
+        <div class="button-container bg-blue-500 text-white px-4 py-2 rounded-md mb-2 inline-block transition-all duration-300">
+          <button id="button-{{ year_reservations.grouper }}-{{ month_reservations.grouper }}" onclick="toggleReservations('{{ year_reservations.grouper }}-{{ month_reservations.grouper }}')">
+            {{ month_reservations.grouper|capfirst }}
+          </button>
+        </div>
+        <div id="reservations-{{ year_reservations.grouper }}-{{ month_reservations.grouper }}" class="hidden overflow-hidden transition-max-height duration-500 max-h-0">
+          {% for reservation in month_reservations.list %}
+          <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 mb-4">
+            <div class="p-4">
+              <h2 class="text-xl font-bold mb-2">{{ reservation.item.item_name }}</h2>
+              <p class="text-sm text-gray-500 mb-2">
+                Varattu: {{ reservation.date_reserved|date:"d.m.Y" }}
+              </p>
+              <p class="text-sm text-gray-500 mb-2">
+                Palautettu: {{ reservation.date_returned|date:"d.m.Y" }}
+              </p>
+              <p class="text-sm text-gray-500 mb-2">
+                {% if reservation.item.item_avail == 'Va' %}
+                <form method="POST" action="{% url 'lainatehdas:create_new_reservation' reservation.item.id %}">
+                  {% csrf_token %}
+                  <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Varaa uudelleen</button>
+                </form>
+                {% endif %}
+              </p>
             </div>
+          </div>
           {% endfor %}
         </div>
       </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
   </div>
+  {% endfor %}
+</div>
 {% else %}
-  <p class="text-lg text-gray-700">Ei vanhoja varauksia</p>
+<p class="text-lg text-gray-700">Ei vanhoja varauksia</p>
 {% endif %}
 
 <script>
-  function toggleReservations(yearMonth) {
-    var buttonContainer = document.querySelector('#button-' + yearMonth).closest('.button-container');
-    var reservations = document.getElementById('reservations-' + yearMonth);
-    
-    if (reservations.classList.contains('hidden')) {
-      // Open the reservations list smoothly
-      reservations.classList.remove('hidden');
-      reservations.style.maxHeight = reservations.scrollHeight + "px";
-      buttonContainer.classList.add('bg-gray-400');
-      buttonContainer.classList.remove('bg-blue-500');
-    } else {
-      
-      // Close the reservations list smoothly
-      reservations.style.maxHeight = "0";
-      buttonContainer.classList.remove('bg-gray-400');
-      buttonContainer.classList.add('bg-blue-500');
-      reservations.addEventListener('transitionend', function() {
-        reservations.classList.add('hidden');
-      }, { once: true });
-    }
-  }
-  document.addEventListener('DOMContentLoaded', function() {
-    const popupContainer = document.getElementById('popupContainer');
-    const popupMessage = document.getElementById('popupMessage');
-
-    function showPopup(message, color) {
-        popupMessage.textContent = message;
-        popupMessage.style.backgroundColor = color;
-        popupContainer.classList.remove('opacity-0');
-        popupContainer.classList.add('opacity-100');
-        setTimeout(function() {
-            popupContainer.classList.remove('opacity-100');
-            popupContainer.classList.add('opacity-0');
-        }, 3000);
-    }
-
-    {% if messages %}
-        {% for message in messages %}
-            {% if message.tags %}
-                {% if 'normal' in message.tags %}
-                    showPopup("{{ message }}", "rgb(34,197,94)");
-                {% elif 'late' in message.tags %}
-                    showPopup("{{ message }}", "rgb(251,191,36)");
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-});
+  // Declare global variables to hold Django data
+  var djangoMessages = JSON.parse('{{ messages_json|safe }}');
 </script>
+<script src="{% static 'JavaScript/messages.js' %}"></script>
+<script src="{% static 'JavaScript/reservations.js' %}"></script>
 {% endblock %}
+``

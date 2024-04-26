@@ -1,52 +1,62 @@
 {% extends "lainatehdas/base.html" %}
 {% load static %}
 
+{% block title %}
+    Info
+{% endblock %}
+
 {% block content %}
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
-    <h1 class="text-2xl md:text-4xl font-semibold text-center tracking-wider mb-4 md:mb-6">Tervetuloa AS Oy. Lainatehtailijat välinevuokrauspalveluun!</h1>
-    <p class="text-base md:text-lg text-gray-700">
-        Tämä palvelu tarjoaa taloyhtiön asukkaille kätevän tavan varata erilaisia välineitä yhteiseen käyttöön. 
+
+    <!-- Introduction -->
+    <h1 class="text-2xl md:text-4xl font-semibold text-center tracking-wider mb-4 md:mb-6">
+        Tervetuloa AS Oy. Lainatehtailijat välinevuokrauspalveluun!
+    </h1>
+    <p class="text-base md:text-lg text-gray-700 text-justify">
+        Tämä palvelu tarjoaa taloyhtiön asukkaille kätevän tavan varata erilaisia välineitä yhteiseen käyttöön.
         Palvelu on suunniteltu helpottamaan arkeasi tarjoamalla pääsyn tarvittaviin työkaluihin ja laitteisiin ilman, että niitä tarvitsee itse hankkia.
+        Luethan seuraavat ohjeet, ennen palvelun käyttöä.
     </p>
 
+    <!-- How it works -->
     <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mt-6 md:mt-8 mb-2 md:mb-4">
         Kuinka palvelu toimii:
     </h2>
-
-    <ul class="list-disc list-inside space-y-2 text-gray-700">
+    <ul class="list-disc list-inside space-y-2 text-gray-700 text-justify">
         <li>
-            <strong>Välinevaraus:</strong> 
-            Kirjaudu sisään sivustolle ja selaa saatavilla olevia välineitä. 
+            <strong>Välinevaraus:</strong>
+            Kirjaudu sisään sivustolle ja selaa saatavilla olevia välineitä.
             Kun löydät tarvitsemasi välineen, voit varata sen käyttöösi antamalla tarvittavat tiedot ja valitsemalla haluamasi noutopäivä.
         </li>
         <li>
-            <strong>Välineen nouto:</strong> 
+            <strong>Välineen nouto:</strong>
             Nouda varattu väline sovittuna päivänä.
         </li>
         <li>
-            <strong>Välineen palautus:</strong> 
+            <strong>Välineen palautus:</strong>
             Palauta väline viimeistään sovittuna palautuspäivänä, jotta se on taas muiden asukkaiden varattavissa.
         </li>
     </ul>
 
+    <!-- Rental Terms -->
     <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mt-6 md:mt-8 mb-2 md:mb-4">
         Vuokrausehdot:
     </h2>
-
-    <ul class="list-disc list-inside space-y-2 text-gray-700">
+    <ul class="list-disc list-inside space-y-2 text-gray-700 text-justify">
         <li>
-            <strong>Vuokrausaika:</strong> 
+            <strong>Vuokrausaika:</strong>
             Jokaiselle välineelle myönnetään enintään 14 vuorokauden vuokra-aika. Tämä varmistaa, että mahdollisimman moni asukas pääsee hyödyntämään välineitä.
         </li>
         <li>
-            <strong>Myöhästymismaksut:</strong> 
-            Jos väline palautetaan myöhässä, perimme myöhästymismaksun, joka on voimassa olevan taksan mukainen sakko per lisävuorokausi. 
+            <strong>Myöhästymismaksut:</strong>
+            Jos väline palautetaan myöhässä, perimme myöhästymismaksun, joka on voimassa olevan taksan mukainen sakko per lisävuorokausi.
             Tämä kannustaa oikea-aikaisiin palautuksiin ja auttaa pitämään palvelun kaikkien asukkaiden saatavilla.
         </li>
     </ul>
 
-    <p class="text-base md:text-lg text-gray-700 mt-4 md:mt-6">
-        Lainatehtailijat-sivusto on suunniteltu tekemään välineiden lainaamisesta yksinkertaista ja vaivatonta. 
+    <!-- Conclusion -->
+    <p class="text-base md:text-lg text-gray-700 mt-4 md:mt-6 text-justify">
+        Lainatehtailijat-sivusto on suunniteltu tekemään välineiden lainaamisesta yksinkertaista ja vaivatonta.
         Kiitämme sinua yhteisön resurssien vastuullisesta käytöstä ja toivotamme hyödyllisiä lainauskokemuksia!
     </p>
 </div>

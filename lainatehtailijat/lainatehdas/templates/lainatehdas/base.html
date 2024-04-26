@@ -1,100 +1,77 @@
 <!DOCTYPE html>
-<html>
 {% load static %}
+<html class="h-full m-0 p-0">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>{% block title %} {% endblock %} | Lainatehdas</title>
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        .wrapper {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .content {
-            flex: 1;
-        }
-    </style>
 </head>
 
-<body>
-<div class="wrapper">
-    {% block header %}
-        <nav class="py-4 px-4 md:py-14 md:px-6 relative text-center" style="background-image: url('{{MEDIA_URL}}images/taloyhtio.jpg'); background-size: cover; background-position: center;">
-            <div style="background-color: rgba(0, 0, 0, 0.5);" class="absolute inset-0"></div>
-            <div class="relative text-white z-10">
-                <div class="text-xl md:text-3xl lg:text-5xl font-semibold tracking-wider mb-2">Lainatehdas</div>
-                {% if request.path == '/main/' %}
-                    <div class="text-sm md:text-lg font-semibold opacity-90">Tervetuloa {{ request.user.username|capfirst }}!</div>
-                {% else %}
-                    <div class="text-sm md:text-lg font-semibold opacity-0">Tervetuloa {{ request.user.username|capfirst }}!</div>
-                {% endif %}
+<body class="h-full m-0 p-0">
+    <div class="wrapper flex flex-col min-h-screen">
+
+        {% block header %}
+            <div class="py-4 px-4 md:py-14 md:px-6 text-center bg-cover bg-center relative" style="background-image: url('{% static 'Images/taloyhtio.jpg' %}');">
+                <div class="bg-black bg-opacity-50 absolute inset-0"></div>
+                <div class="relative z-10 text-white">
+                    <div class="text-xl md:text-3xl lg:text-5xl font-semibold tracking-wider mb-2">Lainatehdas</div>
+                    {% if request.path == '/main/' %}
+                        <div class="text-sm md:text-lg font-semibold opacity-90">Tervetuloa {{ request.user.username|capfirst }}!</div>
+                    {% else %}
+                        <div class="text-sm md:text-lg font-semibold opacity-0">Tervetuloa {{ request.user.username|capfirst }}!</div>
+                    {% endif %}
+                </div>
             </div>
-        </nav>
-    
-
-    {% endblock %}
-    {% block message %}
-        <div id="popupContainer"
-             class="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center pointer-events-none transition-opacity duration-500 opacity-0 z-50">
-            <div id="popupMessage"
-                 class="bg-green-500 text-white px-6 py-4 rounded-md shadow-md pointer-events-auto"></div>
-        </div>
-    {% endblock message %}
-
-    <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-300 bg-gray-700">
-        {% if request.user.is_authenticated %}
-            {% if request.path == '/main/' %}
-                <a href="{% url 'lainatehdas:reservations'%}"
-                   class="px-4 py-2 md:px-6 md:py-3 text-base md:text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Omat
-                    varaukset</a>
-            {% else %}
-                <a href="{% url 'lainatehdas:main'%}"
-                   class="px-4 py-2 md:px-6 md:py-3 text-base md:text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Välineet</a>
-
-            {% endif %}
-            <form id="logout-form" action="{% url 'lainatehdas:logout' %}" method="post">
-                {% csrf_token %}
-                <button type="submit"
-                        class="px-4 py-2 md:px-6 md:py-3 text-base md:text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-blue-700">Kirjaudu
-                    ulos
-                </button>
-            </form>
-        {% else %}
-            <a href="/" class="text-xl font-semibold text-white">Tervetuloa!</a>
-            <div class="space-x-6">
-                {% if request.path == '/login/' %}
-                    <a href="{% url 'lainatehdas:register'%}"
-                       class="px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-blue-700">Luo
-                        tili</a>
+        {% endblock header %}
+        
+        {% block message %}
+            <div id="popupContainer" class="fixed inset-0 flex items-center justify-center transition-opacity duration-500 opacity-0 z-50 pointer-events-none">
+                <div id="popupMessage" class="bg-green-500 text-white px-6 py-4 rounded-md shadow-md pointer-events-auto"></div>
+            </div>
+        {% endblock message %}
+        
+        {% block nav %}
+            <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-300 bg-gray-700">
+                {% if request.user.is_authenticated %}
+                    {% if request.path == '/main/' %}
+                        <a href="{% url 'lainatehdas:reservations'%}" class="px-4 py-2 md:px-6 md:py-3 text-base md:text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Omat varaukset</a>
+                    {% else %}
+                        <a href="{% url 'lainatehdas:main'%}" class="px-4 py-2 md:px-6 md:py-3 text-base md:text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Välineet</a>
+                    {% endif %}
+                    <form id="logout-form" action="{% url 'lainatehdas:logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="px-4 py-2 md:px-6 md:py-3 text-base md:text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-blue-700">Kirjaudu ulos</button>
+                    </form>
                 {% else %}
-                    <a href="{% url 'lainatehdas:login'%}"
-                       class="px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-blue-700">Kirjaudu</a>
+                    <a href="/" class="text-xl font-semibold text-white">Tervetuloa!</a>
+                    <div class="space-x-6">
+                        {% if request.path == '/login/' %}
+                            <a href="{% url 'lainatehdas:register'%}" class="px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-blue-700">Luo tili</a>
+                        {% else %}
+                            <a href="{% url 'lainatehdas:login'%}" class="px-6 py-3 text-lg font-semibold bg-blue-500 text-white rounded-xl hover:bg-blue-700">Kirjaudu</a>
+                        {% endif %}
+                    </div>
                 {% endif %}
-        {% endif %}
-    </nav>
-    <div class="content px-6 py-6 bg-gray-100">
-        {% block content %}
+            </nav>
+        {% endblock nav %}
 
-        {% endblock %}
+        <div class="content flex-1 px-6 py-6 bg-gray-100">
+            {% block content %}
+                
+            {% endblock %}
+        </div>
+
+        {% block footer %}
+        <footer class="py-4 px-6 flex justify-between items-center bg-gray-700">
+            <div class="flex-1">
+                <h3 class="text-white font-semibold">AS Oy. Lainatehtailijat</h3>
+            </div>
+            <div class="flex-1 text-right">
+                <a class="text-white font-semibold" href="{% url 'lainatehdas:info' %}">Info</a>
+            </div>
+        </footer>
+        {% endblock footer %}
     </div>
-    <footer class="py-4 px-6 flex justify-between items-center bg-gray-700">
-        <div class="flex-1">
-            <h3 class="text-white font-semibold">AS Oy. Lainatehtailijat</h3>
-        </div>
-        <div class="flex-1 text-right">
-            <a class="text-white font-semibold" href="{% url 'lainatehdas:info' %}">Info</a>
-        </div>
-    </footer>
-    
-</div>
 </body>
 </html>

@@ -1,91 +1,74 @@
 {% extends "lainatehdas/base.html" %}
 {% load static %}
 
-
+{% block title %}
+    Tuote
+{% endblock %}
 
 {% block content %}
-
 <div class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="md:order-2">
-                <img src="{{MEDIA_URL}}{{item.item_img}}" class="w-full h-auto rounded-lg shadow-md" alt="{{ item.item_name }}">
-            </div>
-            <div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">
-                    {{ item.item_name|capfirst }}
-                </h2>
-                <p class="text-lg text-gray-700 mb-4">
-                    {{ item.item_desc|capfirst }}
-                </p>
-                <p class="text-lg text-gray-700 mb-4">
-                    Tyyppi: {{ item.get_item_type_display|capfirst }}
-                </p>
-                <p class="text-lg text-gray-700 mb-4">
-                    Tila: {{ item.get_item_avail_display|capfirst }}
-                </p>
-                <div class="mb-4">
-                    {% if item.item_avail == "Va" %}
-                        <form method="POST" action="{% url 'lainatehdas:create_new_reservation' item.id %}">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="md:order-2">
+            <img src="{{MEDIA_URL}}{{item.item_img}}" class="w-full h-auto rounded-lg shadow-md" alt="{{ item.item_name }}">
+        </div>
+        <div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                {{ item.item_name|capfirst }}
+            </h2>
+            <p class="text-lg text-gray-700 mb-4">
+                {{ item.item_desc|capfirst }}
+            </p>
+            <p class="text-lg text-gray-700 mb-4">
+                Tyyppi: {{ item.get_item_type_display|capfirst }}
+            </p>
+            <p class="text-lg text-gray-700 mb-4">
+                Tila: {{ item.get_item_avail_display|capfirst }}
+            </p>
+            <div class="mb-4">
+                <!-- If item is available -->
+                {% if item.item_avail == "Va" %}
+                    <form method="POST" action="{% url 'lainatehdas:create_new_reservation' item.id %}">
+                        {% csrf_token %}
+                        <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Varaa</button>
+                    </form>
+                <!-- If item is reserved -->
+                {% elif item.item_avail == "Vr" %}
+                    <!-- If reserved by current user -->
+                    {% if reservation.user_id == request.user.id %}
+                        <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
                             {% csrf_token %}
-                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ">Varaa</button>
+                            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md mb-4">Palauta</button>
                         </form>
-                    {% elif item.item_avail == "Vr" %}
-                        {% for reservation in reservation_list %}
-                            {% if reservation.item_id == item.id and reservation.date_returned == null and reservation.user_id == request.user.id %}
-                                <form method="POST" action="{% url 'lainatehdas:update_return_date' reservation.id reservation.item.id %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md mb-4">Palauta</button>
-                                </form>
-                            {% elif reservation.date_returned == null and reservation.user_id != request.user.id %}
-                                <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed mb-4" disabled>{{ item.get_item_avail_display }}</button>
+                        <p class="text-lg text-gray-700 mb-4">
+                            {% if reservation.return_ontime == True %}
+                                Väline tulisi palauttaa {{ reservation.days_until_deadline }} vuorokauden kuluttua.
+                            {% elif reservation.return_ontime == False %}
+                                Välineen palautus on myöhässä {{ reservation.days_until_deadline }} vuorokautta.
                             {% endif %}
-                        {% endfor %}
+                        </p>
+                    <!-- If reserved by another user -->
                     {% else %}
                         <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed mb-4" disabled>{{ item.get_item_avail_display }}</button>
+                        <p class="text-lg text-gray-700 mb-4">
+                            {% if reservation.return_ontime == True %}
+                                Välineen tulisi vapautua {{ reservation.days_until_deadline }} vuorokauden kuluttua.
+                            {% elif reservation.return_ontime == False %}
+                                Välineen palautus on myöhässä {{ reservation.days_until_deadline }} vuorokautta.
+                            {% endif %}
+                        </p>
                     {% endif %}
-                    <p class="text-lg text-gray-700 mb-4">
-                        {% if item.item_avail == 'Vr'%}
-                            {% for reservation in reservation_list %}
-                                {% if reservation.item_id == item.id and reservation.date_returned == null and reservation.return_ontime == True %}
-                                    Välineen tulisi vapautua {{ reservation.days_until_deadline }} vuorokauden kuluttua.
-                                {% elif reservation.item_id == item.id and reservation.date_returned == null and reservation.return_ontime == False %}
-                                    Välineen palautus on myöhässä {{ reservation.days_until_deadline }} vuorokautta.
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    </p>
-                </div>
+                {% else %}
+                    <!-- If item availability is something else -->
+                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-not-allowed mb-4 disabled">{{ item.get_item_avail_display }}</button>
+                {% endif %}
             </div>
         </div>
     </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const popupContainer = document.getElementById('popupContainer');
-            const popupMessage = document.getElementById('popupMessage');
-        
-            function showPopup(message, color) {
-                popupMessage.textContent = message;
-                popupMessage.style.backgroundColor = color;
-                popupContainer.classList.remove('opacity-0');
-                popupContainer.classList.add('opacity-100');
-                setTimeout(function() {
-                    popupContainer.classList.remove('opacity-100');
-                    popupContainer.classList.add('opacity-0');
-                }, 3000);
-            }
-        
-            {% if messages %}
-                {% for message in messages %}
-                    {% if message.tags %}
-                        {% if 'normal' in message.tags %}
-                            showPopup("{{ message }}", "rgb(34,197,94)");
-                        {% elif 'late' in message.tags %}
-                            showPopup("{{ message }}", "rgb(251,191,36)");
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        });
-    </script>
-    {% endblock %}
+</div>
+<!-- Django Messages -->
+<script>
+    var djangoMessages = JSON.parse('{{ messages_json|safe }}');
+</script>
+<!-- Required scripts -->
+<script src="{% static 'JavaScript/messages.js' %}"></script>
+{% endblock %}
