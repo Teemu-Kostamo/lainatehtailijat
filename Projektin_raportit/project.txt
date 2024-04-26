@@ -1,6 +1,8 @@
 Lainausjärjestelmä lainatehdas
 Teemu Kostamo, Heikki Pernu
 https://lainatehdas.duckdns.org
-test ID with passwords for testing, unless you can easily create IDs yourself
+USER = admin
+PASS = lainalaina
+
 link to the project's GitHub (use the same GitHub organization as for assignments as well)
 link to YouTube video
