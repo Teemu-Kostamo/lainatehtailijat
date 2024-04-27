@@ -3,6 +3,5 @@ Teemu Kostamo, Heikki Pernu
 https://lainatehdas.duckdns.org
 USER = admin
 PASS = lainalaina
-
-link to the project's GitHub (use the same GitHub organization as for assignments as well)
-link to YouTube video
+GitHub linkki - https://github.com/hamk-webdev-intim22a6/lainatehtailijat/tree/main
+Youtube linkki - https://youtu.be/W6EfCDqpMXs
