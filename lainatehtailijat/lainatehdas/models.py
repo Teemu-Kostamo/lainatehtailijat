@@ -48,9 +48,8 @@ class Reservation(models.Model):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    #date_reserved = models.DateField(auto_now_add=True)
     date_reserved = models.DateField()
     date_returned = models.DateField(null=True, blank=True)
-    date_deadline = models.DateField(null=True, blank=True)
+    date_deadline = models.DateField(null=True, blank=True, editable=False)
 
 
