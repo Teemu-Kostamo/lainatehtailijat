@@ -8,5 +8,7 @@ WORKDIR /src
 
 EXPOSE 8000
 
+RUN python lainatehtailijat/manage.py collectstatic
+
 ENTRYPOINT [ "python", "lainatehtailijat/manage.py" ]
 CMD [ "runserver", "0.0.0.0:8000" ]

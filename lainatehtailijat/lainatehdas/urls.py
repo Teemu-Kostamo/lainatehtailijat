@@ -4,6 +4,9 @@ from . import views
 from .forms import UserLoginForm
 from django.conf.urls.static import static
 from django.conf import settings
+from django.urls import re_path
+from django.views.static import serve
+
 app_name = 'lainatehdas'
 urlpatterns = [
     path('', views.index, name='index'),
@@ -15,5 +18,7 @@ urlpatterns = [
     path('reservations/', views.reservations, name='reservations'),
     path('reservations/<int:reservation_id>/update_return_date/<int:item_id>/', views.update_return_date, name='update_return_date'),
     path('reservations/<int:item_id>/create/', views.create_new_reservation, name='create_new_reservation'),
-    path('info/', views.info, name='info')
-] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('info/', views.info, name='info'),
+    re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT})
+]

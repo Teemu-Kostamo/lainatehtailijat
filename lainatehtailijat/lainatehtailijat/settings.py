@@ -33,7 +33,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL='/login'
 
-ALLOWED_HOSTS = ["127.0.0.1", "lainatehdas.duckdns.org"]
+ALLOWED_HOSTS = ["127.0.0.1", "192.168.8.10", "lainatehdas.duckdns.org"]
 CSRF_TRUSTED_ORIGINS = ["https://lainatehdas.duckdns.org"]
 
 
@@ -84,18 +84,18 @@ WSGI_APPLICATION = 'lainatehtailijat.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-    # "default": {
-    #     "ENGINE": "django.db.backends.mysql",
-    #     "NAME": os.getenv('NAME'),
-    #     "USER": os.getenv('USER'),
-    #     "PASSWORD": os.getenv('PASSWORD'),
-    #     "HOST": os.getenv('HOST'),
-    #     "PORT": os.getenv('PORT'),
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": os.getenv('NAME'),
+        "USER": os.getenv('USER'),
+        "PASSWORD": os.getenv('PASSWORD'),
+        "HOST": os.getenv('HOST'),
+        "PORT": os.getenv('PORT'),
+    }
 }
 
 
@@ -135,9 +135,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+STATIC_ROOT = BASE_DIR / 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
